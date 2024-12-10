@@ -96,10 +96,12 @@ void handleVariableDeclaration(std::vector<std::string>& tokens) {
     for (int i = 4; i < tokens.size(); ++i) {
         if (variable.dataType == rvalue_type::STRING && tokens[i] == "+") {
             instruction.instructionType = instruction_type::CONCAT;
-            
+            if (tokens[i + 1].front() == '"' && tokens[i + 1].back() == '"') instruction.dataType = rvalue_type::STRING;
+            else instruction.dataType = rvalue_type::INFERRED;
             instruction.instructionArgument = tokens[i + 1];
 
             outFile.write(reinterpret_cast<const char*>(&instruction.instructionType), sizeof(instruction.instructionType));
+            outFile.write(reinterpret_cast<const char*>(&instruction.dataType), sizeof(instruction.dataType));
             writeString(outFile, std::get<std::string>(instruction.instructionArgument));
         }
     }

@@ -1,6 +1,9 @@
 #ifndef BYTECODE_EXECUTOR_HPP
 #define BYTECODE_EXECUTOR_HPP
 
+
+#include <string>
+
 #include "helper_header.hpp"
 #include "memory_management.hpp"
 
@@ -59,7 +62,17 @@ void handlePrintInstruction(std::ifstream& inFile) {
 }
 
 void handleConcatInstruction(std::ifstream& inFile) {
-    
+    rvalue_type datatype;
+    std::string rvalue;
+
+    inFile.read(reinterpret_cast<char*>(&datatype), sizeof(datatype));
+
+    if (datatype == rvalue_type::STRING) {
+        readString(inFile, rvalue);
+        std::get<std::string>(variableStack.back()) += rvalue.substr(1, rvalue.length() - 2);
+    } else if (datatype == rvalue_type::INFERRED) {
+        std::get<std::string>(variableStack.back()) += std::get<std::string>(lookUpVar(inFile));
+    }
 }
 
 void executeBytecode() {

@@ -43,7 +43,7 @@ void exitScope() {
 }
 
 EntityType lookUpVar(std::ifstream& inFile) {
-    EntityType value;
+    EntityType rvalue;
     std::string varName;
     readString(inFile, varName);
 
@@ -51,7 +51,7 @@ EntityType lookUpVar(std::ifstream& inFile) {
     for (int i = variableScopes.size() - 1; i >= 0; --i) {
         if (variableScopes[i].find(varName) != variableScopes[i].end()) {
             int offset = variableScopes[i][varName];    
-            value = variableStack[offset];
+            rvalue = variableStack[offset];
             found = true;
             break;
         }
@@ -62,7 +62,24 @@ EntityType lookUpVar(std::ifstream& inFile) {
         std::exit(0);
     }
 
-    return value;
+    return rvalue;
+}
+
+void reassignVar(std::string varName, EntityType rvalue) {
+    bool found = false;
+    for (int i = variableScopes.size() - 1; i >= 0; --i) {
+        if (variableScopes[i].find(varName) != variableScopes[i].end()) {
+            int offset = variableScopes[i][varName];    
+            variableStack[offset] = rvalue;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        std::cout << "Error: Variable not found\n";
+        std::exit(0);
+    }
 }
 
 #endif
