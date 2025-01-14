@@ -2,9 +2,24 @@
 #include "bytecode_executor.hpp"
 
 int main(int argc, char* argv[]) {
-    std::cin >> sourcecode_filepath;
+
+    sourcecode_filepath = "main.ziv";
     translateToBytecode();
     executeBytecode();
+
+    std::string cmd;
+
+    for (int i = 1; i < argc; ++i) {
+        sourcecode_filepath = argv[2];
+        cmd = argv[1];
+    }
+
+    if (cmd == "exec") {    
+        translateToBytecode();
+        executeBytecode();
+    } else if (cmd == "parse") {
+        translateToBytecode();
+    }
 
     return 0;
 }   

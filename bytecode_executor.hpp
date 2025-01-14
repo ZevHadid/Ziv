@@ -56,8 +56,12 @@ void handleVariableDeclaration(std::ifstream& inFile) {
 }
 
 void handlePrintInstruction(std::ifstream& inFile) {
-    std::visit([&](auto&& v) {
-        std::cout << v;
+    std::visit([&](auto&& v) { 
+        if constexpr (std::is_same_v<std::decay_t<decltype(v)>, bool>) { 
+            std::cout << (v ? "true" : "false"); 
+        } else { 
+            std::cout << v; 
+        }
     }, lookUpVar(inFile));
 }
 
@@ -80,7 +84,9 @@ void executeBytecode() {
 
     instruction_type instructionType;
 
-    std::ifstream inFile(sourcecode_filepath + 'o', std::ios::binary);
+
+    std::ifstream inFile(sourcecode_filepath.substr(0, sourcecode_filepath.size() - 2) + "ef", std::ios::binary);
+
 
     while (inFile.read(reinterpret_cast<char*>(&instructionType), sizeof(instructionType))) {
         switch (instructionType) {

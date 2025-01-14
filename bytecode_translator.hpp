@@ -21,7 +21,7 @@ void handlePrintStatement(std::vector<std::string>& tokens) {
     instruction.instructionType = instruction_type::PRINT;
     instruction.instructionArgument = tokens[1];
 
-    std::ofstream outFile(sourcecode_filepath + 'o', std::ios::binary | std::ios::out | std::ios::app);
+    std::ofstream outFile(sourcecode_filepath.substr(0, sourcecode_filepath.size() - 2) + "ef", std::ios::binary | std::ios::out | std::ios::app);
     if (!outFile.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
         return;
@@ -39,7 +39,7 @@ void handleVariableDeclaration(std::vector<std::string>& tokens) {
     variable.instructionType = instruction_type::VARIABLE;
     variable.varName = tokens[1];
 
-    std::ofstream outFile(sourcecode_filepath + 'o', std::ios::binary | std::ios::out | std::ios::app);
+    std::ofstream outFile(sourcecode_filepath.substr(0, sourcecode_filepath.size() - 2) + "ef", std::ios::binary | std::ios::out | std::ios::app);
     if (!outFile.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
         return;
@@ -72,18 +72,18 @@ void handleVariableDeclaration(std::vector<std::string>& tokens) {
         outFile.write(reinterpret_cast<const char*>(&std::get<float>(variable.value)), sizeof(float));
     }
 
-    else if (rvalue == "True") {
+    else if (rvalue == "true") {
         variable.dataType = rvalue_type::BOOLEAN;
         variable.value = true;
         outFile.write(reinterpret_cast<const char*>(&variable.dataType), sizeof(variable.dataType));
-        outFile.write(reinterpret_cast<const char*>(&std::get<float>(variable.value)), sizeof(float));
+        outFile.write(reinterpret_cast<const char*>(&std::get<bool>(variable.value)), sizeof(bool));
     }
 
-    else if (rvalue == "False") {
+    else if (rvalue == "false") {
         variable.dataType = rvalue_type::BOOLEAN;
         variable.value = false;
         outFile.write(reinterpret_cast<const char*>(&variable.dataType), sizeof(variable.dataType));
-        outFile.write(reinterpret_cast<const char*>(&std::get<float>(variable.value)), sizeof(float));
+        outFile.write(reinterpret_cast<const char*>(&std::get<bool>(variable.value)), sizeof(bool));
     }
 
     else {
@@ -211,7 +211,7 @@ void translateToBytecode() {
         return;
     }
 
-    std::remove((sourcecode_filepath + 'o').c_str());
+    std::remove((sourcecode_filepath.substr(0, sourcecode_filepath.size() - 2) + "ef").c_str());
 
     std::string buffer;
     buffer.reserve(BUFFER_SIZE);
