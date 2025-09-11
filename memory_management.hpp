@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <variant>
 
-using EntityType = std::variant<int, bool, float, std::string>;
+#include "helper_header.hpp"
 
 std::vector<EntityType> variableStack;
 std::vector<std::unordered_map<std::string, int>> variableScopes;
