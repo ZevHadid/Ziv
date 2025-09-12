@@ -1,13 +1,6 @@
-#ifndef MEMORY_MANAGEMENT_HPP
-#define MEMORY_MANAGEMENT_HPP
-
+#include "memory_management.hpp"
 #include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <variant>
-
-#include "helper_header.hpp"
+#include <cstdlib>
 
 std::vector<EntityType> variableStack;
 std::vector<std::unordered_map<std::string, int>> variableScopes;
@@ -16,29 +9,27 @@ std::vector<int> framePointers;
 void storeEntity(const std::string& identifier, EntityType value) {
     auto& currentScope = variableScopes.back();
 
-    // Check if the variable already exists in the current scope
     if (currentScope.find(identifier) != currentScope.end()) {
         std::cout << "Error: Variable '" << identifier << " already declared in the current scope.\n";
         std::exit(0);
     }
 
-    // Add the variable to the current scope and push to the stack
     int offset = variableStack.size();
     currentScope[identifier] = offset;
     variableStack.push_back(value);
 }
 
 void enterScope() {
-    framePointers.push_back(variableStack.size());  // Record the current stack top
-    variableScopes.push_back({});  // Create a new scope (empty map)
+    framePointers.push_back(variableStack.size());
+    variableScopes.push_back({});
 }
 
 void exitScope() {
     if (!framePointers.empty()) {
         int frameStart = framePointers.back();
-        variableStack.resize(frameStart);  // Remove all variables in the current frame
+        variableStack.resize(frameStart);
         framePointers.pop_back();
-        variableScopes.pop_back();  // Remove the variable map for the current scope
+        variableScopes.pop_back();
     }
 }
 
@@ -65,7 +56,7 @@ EntityType lookUpVar(std::ifstream& inFile) {
     return rvalue;
 }
 
-void reassignVar(std::string varName, EntityType rvalue) {
+void reassignVar(const std::string& varName, EntityType rvalue) {
     bool found = false;
     for (int i = variableScopes.size() - 1; i >= 0; --i) {
         if (variableScopes[i].find(varName) != variableScopes[i].end()) {
@@ -81,5 +72,3 @@ void reassignVar(std::string varName, EntityType rvalue) {
         std::exit(0);
     }
 }
-
-#endif
