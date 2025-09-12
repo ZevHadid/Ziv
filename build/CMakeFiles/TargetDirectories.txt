@@ -1,0 +1,3 @@
+/home/zev/ziv/build/CMakeFiles/main.dir
+/home/zev/ziv/build/CMakeFiles/edit_cache.dir
+/home/zev/ziv/build/CMakeFiles/rebuild_cache.dir
