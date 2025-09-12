@@ -5,10 +5,6 @@
 
 int main(int argc, char* argv[]) {
 
-    sourcecode_filepath = "main.ziv";
-    translateToBytecode();
-    executeBytecode();
-
     std::string cmd;
 
     for (int i = 1; i < argc; ++i) {

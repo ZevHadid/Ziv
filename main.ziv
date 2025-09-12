@@ -1,3 +1,3 @@
-var x = "test";
+var x = "Hello world!";
 
 print x;
