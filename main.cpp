@@ -1,5 +1,7 @@
-#include "bytecode_translator.hpp"
-#include "bytecode_executor.hpp"
+#include "bytecode_translator/bytecode_translator.hpp"
+#include "bytecode_executor/bytecode_executor.hpp"
+#include "helper/helper.hpp"
+#include <string>
 
 int main(int argc, char* argv[]) {
 
